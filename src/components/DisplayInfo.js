@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './DisplayInfo.scss';
 
 const DisplayInfo = (props) => {
@@ -10,14 +10,24 @@ const DisplayInfo = (props) => {
         setShowHideListUser(!isShowHideListUser);
     }
 
+    useEffect(() => {
+        if (listUsers.length === 0) {
+            alert("You deleted all users!")
+        }
+        console.log(">>>Call me useEffect !");
+    }, [listUsers]
+    )
+
     return (
-        <div className="display-info-container">
+        < div className="display-info-container" >
+            {console.log(">>>Call me render !")}
             <div>
                 <span onClick={() => handleShowHideListUser()}>
                     {isShowHideListUser === true ? "Hide list users" : "Show list users"}
                 </span>
             </div>
-            {isShowHideListUser &&
+            {
+                isShowHideListUser &&
                 <div>
                     {listUsers.map((user) => {
                         return (
@@ -35,7 +45,7 @@ const DisplayInfo = (props) => {
                     })}
                 </div>
             }
-        </div>
+        </div >
     );
 }
 
