@@ -1,46 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import AddUserInfo from "./AddUserInfo";
 import DisplayInfo from "./DisplayInfo";
 
-class MyComponent extends React.Component {
-    state = {
-        listUsers: [
-            { id: 1, name: "Văn Đình Phương", age: 46 },
-            { id: 2, name: "Trần Quốc Việt", age: 69 },
-            { id: 3, name: "Phan Quốc Huy", age: 16 }
-        ]
+const MyComponent = (props) => {
+    const [listUsers, setListUsers] = useState([
+        { id: 1, name: "Văn Đình Phương", age: 46 },
+        { id: 2, name: "Trần Quốc Việt", age: 69 },
+        { id: 3, name: "Phan Quốc Huy", age: 16 }
+    ])
+
+    const handleAddNewUser = (userOb) => {
+        setListUsers([userOb, ...listUsers])
     }
 
-    handleAddNewUser = (userOb) => {
-        this.setState({
-            listUsers: [userOb, ...this.state.listUsers]
-        });
-    }
-
-    handleDeleteUser = (userId) => {
-        let listUsersClone = this.state.listUsers;
+    const handleDeleteUser = (userId) => {
+        let listUsersClone = listUsers;
         listUsersClone = listUsersClone.filter(item => item.id !== userId);
-        this.setState({
-            listUsers: listUsersClone,
-        })
+        setListUsers(listUsersClone)
     }
 
-    render() {
-        //DRY: don't repeat yourself        
-        return (
-            <>
-                <br />
-                <AddUserInfo
-                    handleAddNewUser={this.handleAddNewUser}
-                />
-                <br /> <br />
-                <DisplayInfo
-                    listUsers={this.state.listUsers}
-                    handleDeleteUser={this.handleDeleteUser}
-                />
-            </>
-        );
-    }
+    return (
+        <>
+            <br />
+            <AddUserInfo
+                handleAddNewUser={handleAddNewUser}
+            />
+            <br /> <br />
+            <DisplayInfo
+                listUsers={listUsers}
+                handleDeleteUser={handleDeleteUser}
+            />
+        </>
+    );
 }
 
 export default MyComponent;
