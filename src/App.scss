@@ -6,3 +6,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.app-container {
+  .header-container {
+
+    //Ghi đè .active của bootstrap
+    .navbar-nav {
+      .nav-link {
+        &.active {
+          color: red;
+        }
+      }
+    }
+
+    // .navbar-nav .nav-link.active {
+    //   color: red;
+    // }
+  }
+}
