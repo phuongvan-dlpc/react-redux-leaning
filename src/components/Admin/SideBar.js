@@ -3,6 +3,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import sidebarBg from '../../assets/sidebar-bg-img.jpg'
 import { FaGem, FaReact } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 const SideBar = (props) => {
     const { image, collapsed, toggled, handleToggleSidebar } = props;
@@ -40,6 +41,7 @@ const SideBar = (props) => {
                         // suffix={<span className="badge red">New</span>}
                         >
                             Dashboard
+                            <Link to="/admins" />
                         </MenuItem>
                     </Menu>
                     <Menu iconShape="circle">
@@ -47,7 +49,10 @@ const SideBar = (props) => {
                             icon={<FaGem />}
                             title="Features"
                         >
-                            <MenuItem> Quản lý user </MenuItem>
+                            <MenuItem>
+                                Quản lý user
+                                <Link to="/admins/manage-users" />
+                            </MenuItem>
                             <MenuItem> Quản lý bài quiz</MenuItem>
                             <MenuItem>Quản lý câu hỏi</MenuItem>
                         </SubMenu>
