@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc";
+import { toast } from 'react-toastify';
 
 
 const ModalCreateUser = (props) => {
@@ -34,8 +35,26 @@ const ModalCreateUser = (props) => {
         console.log("image preview", previewImage);
     }
 
+    const validateEmail = (emailInput) => {
+        return String(emailInput)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
     const handleSubmitCreateUser = async () => {
         //validate
+        const isValidEmail = validateEmail(email);
+        if (!isValidEmail) {
+            toast.error("Invalid email !");
+            return;
+        }
+
+        if (!password) {
+            toast.error("Chưa nhập password!");
+            return;
+        }
 
         //Submit data        
         const data = new FormData();
@@ -47,6 +66,15 @@ const ModalCreateUser = (props) => {
 
         let res = await axios.post('http://localhost:8081/api/v1/participant', data);
         console.log("Check res: ", res);
+        if (res.data && res.data.EC === 0) {
+            toast.success(res.data.EM);
+            handleClose();
+        }
+
+        if (res.data && res.data.EC !== 0) {
+            console.log('check res data: ', res.data)
+            toast.error(res.data.EM);
+        }
     }
 
     return (
