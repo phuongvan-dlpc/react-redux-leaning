@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
@@ -6,7 +7,15 @@ import { FcPlus } from "react-icons/fc";
 
 const ModalCreateUser = (props) => {
     const { show, setShow } = props;
-    const handleClose = () => setShow(false); //hàm setShow gọi từ parent
+    const handleClose = () => {
+        setShow(false); //hàm setShow gọi từ parent
+        setEmail('');
+        setPassword('');
+        setUsername('');
+        setRole('USER');
+        setImage('');
+        setPreviewImage('');
+    }
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -23,6 +32,21 @@ const ModalCreateUser = (props) => {
 
         console.log("image", image);
         console.log("image preview", previewImage);
+    }
+
+    const handleSubmitCreateUser = async () => {
+        //validate
+
+        //Submit data        
+        const data = new FormData();
+        data.append('email', email);
+        data.append('password', password);
+        data.append('username', username);
+        data.append('role', role);
+        data.append('userImage', image);
+
+        let res = await axios.post('http://localhost:8081/api/v1/participant', data);
+        console.log("Check res: ", res);
     }
 
     return (
@@ -95,7 +119,7 @@ const ModalCreateUser = (props) => {
                         Close
                     </Button>
                     <Button variant="primary"
-                        onClick={handleClose}
+                        onClick={() => handleSubmitCreateUser()}
                     >
                         Save
                     </Button>
