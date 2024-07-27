@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from "react-icons/fc";
 import { toast } from 'react-toastify';
-import { postCreateNewUser } from '../../../services/apiService';
+import { putUpdateUser } from '../../../services/apiService';
 import _ from 'lodash';
 
 const ModalUpdateUser = (props) => {
@@ -16,6 +16,7 @@ const ModalUpdateUser = (props) => {
         setRole('USER');
         setImage('');
         setPreviewImage('');
+        props.resetUpdateData();
     }
 
     const [email, setEmail] = useState('');
@@ -56,7 +57,7 @@ const ModalUpdateUser = (props) => {
             );
     };
 
-    const handleSubmitCreateUser = async () => {
+    const handleSubmitUpdateUser = async () => {
         //validate
         const isValidEmail = validateEmail(email);
         if (!isValidEmail) {
@@ -64,12 +65,7 @@ const ModalUpdateUser = (props) => {
             return;
         }
 
-        if (!password) {
-            toast.error("Chưa nhập password!");
-            return;
-        }
-
-        let res = await postCreateNewUser(email, password, username, role, image);
+        let res = await putUpdateUser(dataUpdate.id, username, role, image);
 
         if (res && res.EC === 0) {
             toast.success(res.EM);
@@ -154,7 +150,7 @@ const ModalUpdateUser = (props) => {
                         Close
                     </Button>
                     <Button variant="primary"
-                        onClick={() => handleSubmitCreateUser()}
+                        onClick={() => handleSubmitUpdateUser()}
                     >
                         Save
                     </Button>
