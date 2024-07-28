@@ -3,9 +3,10 @@ import './ManageUser.scss';
 import { FcPlus } from "react-icons/fc";
 import TableUser from "./TableUser";
 import { useEffect, useState } from "react";
-import { getAllUser } from "../../../services/apiService";
+import { getAllUser, getUserPaginate } from "../../../services/apiService";
 import ModalUpdateUser from "./ModalUpdateUser";
 import ModalDeleteUser from "./ModalDeleteUser";
+import TableUserPaginate from "./TableUserPaginate";
 
 const ManageUser = (props) => {
     const [showModalCreateUser, setShowModalCreateUser] = useState(false);
@@ -14,15 +15,27 @@ const ManageUser = (props) => {
     const [dataUpdate, setDataUpdate] = useState({});
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [dataDelete, setDataDelete] = useState({});
+    const LIMIT_USER = 4;
+    const [pageCount, setPageCount] = useState(0);
 
     useEffect(() => {
-        fetchListUser();
+        //fetchListUser();
+        fetchListUserPaginate(1);
     }, [])
 
     const fetchListUser = async () => {
         let res = await getAllUser();
         if (res && res.EC === 0) {
             setListUser(res.DT);
+        }
+    }
+
+    const fetchListUserPaginate = async (page) => {
+        let res = await getUserPaginate(page, LIMIT_USER);
+        if (res && res.EC === 0) {
+            console.log("chect data with paginate: ", res.DT);
+            setListUser(res.DT.users);
+            setPageCount(res.DT.totalPages);
         }
     }
 
@@ -54,10 +67,17 @@ const ManageUser = (props) => {
                     </button>
                 </div>
                 <div className="table-users-container">
-                    <TableUser
+                    {/* <TableUser
                         listUser={listUser}
                         handleClickBtnUpdate={handleClickBtnUpdate}
                         handleClickBtnDelete={handleClickBtnDelete}
+                    /> */}
+                    <TableUserPaginate
+                        listUser={listUser}
+                        handleClickBtnUpdate={handleClickBtnUpdate}
+                        handleClickBtnDelete={handleClickBtnDelete}
+                        fetchListUserPaginate={fetchListUserPaginate}
+                        pageCount={pageCount}
                     />
                 </div>
                 <ModalCreateUser
