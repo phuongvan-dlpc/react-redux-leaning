@@ -1,14 +1,45 @@
 import { useState } from 'react';
 import './Login.scss';
 import { useNavigate } from 'react-router-dom';
+import { postLogin } from '../../services/apiService';
+import { toast } from 'react-toastify';
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navig = useNavigate();
 
-    const handleLogin = () => {
-        alert('You clicked login button! email=' + email + ' password=' + password);
+    const validateEmail = (emailInput) => {
+        return String(emailInput)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
+
+    const handleLogin = async () => {
+        //validate
+        const isValidEmail = validateEmail(email);
+        if (!isValidEmail) {
+            toast.error("Invalid email !");
+            return;
+        }
+
+        if (!password) {
+            toast.error("Chưa nhập password!");
+            return;
+        }
+
+        //Submit apis
+        let res = await postLogin(email, password);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+            navig('/');
+        }
+
+        if (res && res.EC !== 0) {
+            toast.error(res.EM);
+        }
     }
     return (
         <div className="login-container">
