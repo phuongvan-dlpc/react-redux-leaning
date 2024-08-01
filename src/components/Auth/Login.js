@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Login.scss';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { postLogin } from '../../services/apiService';
 import { toast } from 'react-toastify';
 
@@ -45,7 +45,7 @@ const Login = (props) => {
         <div className="login-container">
             <div className='header'>
                 <span>Don't have an account yet?</span>
-                <button>Sign up</button>
+                <button onClick={() => navig('/register')}>Sign up</button>
             </div>
             <div className='title col-4 mx-auto'>
                 Hoi dan IT
