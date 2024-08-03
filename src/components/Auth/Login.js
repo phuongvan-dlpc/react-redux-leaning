@@ -5,12 +5,14 @@ import { postLogin } from '../../services/apiService';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { doLogin } from '../../redux/action/userAction';
+import { ImSpinner10 } from "react-icons/im";
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navig = useNavigate();
     const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
     const validateEmail = (emailInput) => {
         return String(emailInput)
@@ -33,16 +35,20 @@ const Login = (props) => {
             return;
         }
 
+        setIsLoading(true);
+
         //Submit apis
         let res = await postLogin(email, password);
         if (res && res.EC === 0) {
             dispatch(doLogin(res));
             toast.success(res.EM);
+            setIsLoading(false);
             navig('/');
         }
 
         if (res && res.EC !== 0) {
             toast.error(res.EM);
+            setIsLoading(false);
         }
     }
     return (
@@ -74,7 +80,13 @@ const Login = (props) => {
                 </div>
                 <span className='forgot-password'>Forgot password?</span>
                 <div>
-                    <button className='btn-submit' onClick={() => handleLogin()}>Login</button>
+                    <button className='btn-submit'
+                        onClick={() => handleLogin()}
+                        disabled={isLoading}
+                    >
+                        {isLoading === true && <ImSpinner10 className='loader-icon' />}
+                        <span>Login</span>
+                    </button>
                 </div>
                 <div className='text-center'>
                     <span className='back' onClick={() => { navig('/') }}>
