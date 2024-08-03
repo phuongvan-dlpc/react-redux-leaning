@@ -3,11 +3,14 @@ import './Login.scss';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { postLogin } from '../../services/apiService';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { doLogin } from '../../redux/action/userAction';
 
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navig = useNavigate();
+    const dispatch = useDispatch();
 
     const validateEmail = (emailInput) => {
         return String(emailInput)
@@ -33,6 +36,7 @@ const Login = (props) => {
         //Submit apis
         let res = await postLogin(email, password);
         if (res && res.EC === 0) {
+            dispatch(doLogin(res));
             toast.success(res.EM);
             navig('/');
         }
