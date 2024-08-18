@@ -7,7 +7,6 @@ const Question = (props) => {
     }
 
     const handleCheckbox = (event, aId, qId) => {
-        console.log('check data props: ', aId, qId);
         props.handleCheckbox(aId, qId);
     }
     return (
