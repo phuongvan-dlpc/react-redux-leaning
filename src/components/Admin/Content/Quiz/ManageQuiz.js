@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./ManageQuiz.scss";
 import Select from "react-select";
+import { postCreateNewQuiz } from "../../../../services/apiService";
+import { toast } from "react-toastify";
 
 const options = [
     { value: 'EASY', label: 'EASY' },
@@ -20,8 +22,21 @@ const ManageQuiz = (props) => {
         }
     }
 
-    const handleSubmitQuiz = () => {
-        alert("you clicked save button");
+    const handleSubmitQuiz = async () => {
+        //validate
+        if (!name || !description) {
+            toast.error('name/description is require');
+            return;
+        }
+        let res = await postCreateNewQuiz(name, description, type?.value, image);
+        if (res && res.EC === 0) {
+            toast.success(res.EM);
+            setName("");
+            setDescription("");
+            setImage(null);
+        } else {
+            toast.error(res.EM);
+        }
     }
 
     return (
