@@ -13,6 +13,8 @@
         }
 
         .admin-main {
+            height: calc(100vh - 40px); //40px là chiều cao của admin-header 
+
             .user-pagination {
                 display: flex;
                 justify-content: center;
